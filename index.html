@@ -8,460 +8,467 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bk:#0a0a0a;--wh:#fff;--g1:#f5f5f5;--g2:#e5e5e5;--g4:#a3a3a3;--g6:#525252;--g8:#262626;--ac:#ff4d00;--tr:0.3s cubic-bezier(.4,0,.2,1);--f:'Inter',sans-serif}
-    body{font-family:var(--f);background:var(--wh);color:var(--bk);overflow-x:hidden;line-height:1.6}
+    :root{--ac:#ff4d00;--bk:#0a0a0a;--g1:#f5f5f5;--g4:#a3a3a3;--g6:#525252;--tr:.3s ease}
+    body{font-family:'Inter',sans-serif;color:var(--bk)}
     html{scroll-behavior:smooth}
+    a{text-decoration:none;color:inherit}
 
-    /* Utilidades reutilizables */
-    .fc{display:flex;align-items:center;justify-content:center}
-    .nb{background:none;border:none;cursor:pointer}
-
-    /* Banners de seccion */
-    .sl{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:var(--wh);padding:.6rem 1.5rem;text-align:center;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;border-bottom:2px solid var(--ac)}
-    .sl b{color:var(--ac);margin-right:.5rem}
-
-    /* Loader */
+    /* === SECCION 1: LOADER === */
     #loader{position:fixed;inset:0;background:var(--bk);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
-    #loader.hidden{opacity:0;visibility:hidden}
-    .loader-bar{width:120px;height:3px;background:var(--g8);border-radius:2px;overflow:hidden;position:relative}
-    .loader-bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:0%;background:var(--ac);animation:load 1.2s ease-out forwards}
+    #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-bar{width:120px;height:3px;background:#262626;border-radius:2px;overflow:hidden;position:relative}
+    .loader-bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:0;background:var(--ac);animation:load 1.2s ease-out forwards}
     @keyframes load{to{width:100%}}
 
-    /* Nav */
-    nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.2rem 2rem;transition:var(--tr)}
-    nav.scrolled{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--g2);padding:.8rem 2rem}
-    .nav-container{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-    .logo{font-size:1.5rem;font-weight:900;letter-spacing:-.02em;text-decoration:none;color:var(--bk)}
-    .nav-links{display:flex;list-style:none;gap:2.5rem}
-    .nav-links a{text-decoration:none;color:var(--g6);font-size:.875rem;font-weight:500;letter-spacing:.02em;transition:color var(--tr);position:relative}
-    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--bk);transition:width var(--tr)}
-    .nav-links a:hover{color:var(--bk)}
-    .nav-links a:hover::after{width:100%}
-    .nav-actions{display:flex;align-items:center;gap:1rem}
-    .cart-btn{position:relative;color:var(--bk)}
-    .cart-count{position:absolute;top:-6px;right:-8px;background:var(--ac);color:#fff;font-size:.65rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-    .menu-toggle{display:none;flex-direction:column;gap:5px}
-    .menu-toggle span{width:24px;height:2px;background:var(--bk);transition:var(--tr)}
-    .mobile-menu{position:fixed;inset:0;background:var(--wh);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:var(--tr)}
-    .mobile-menu.active{opacity:1;visibility:visible}
-    .mobile-menu ul{list-style:none;text-align:center}
-    .mobile-menu a{font-size:2rem;font-weight:700;text-decoration:none;color:var(--bk);display:block;padding:.75rem 0;transition:color var(--tr)}
-    .mobile-menu a:hover{color:var(--ac)}
+    /* === SECCION 2: NAVBAR === */
+    .navbar-custom{background:transparent;padding:1rem 0;transition:var(--tr)}
+    .navbar-custom.scrolled{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);box-shadow:0 1px 10px rgba(0,0,0,.06)}
+    .navbar-custom .navbar-brand{font-size:1.6rem;font-weight:900;letter-spacing:-.02em;color:var(--bk)}
+    .navbar-custom .nav-link{color:var(--g6)!important;font-size:.85rem;font-weight:500;letter-spacing:.02em;padding:.5rem 1rem!important;transition:color var(--tr)}
+    .navbar-custom .nav-link:hover{color:var(--bk)!important}
+    .cart-btn{position:relative;background:none;border:none;cursor:pointer;padding:8px}
+    .cart-badge{position:absolute;top:0;right:0;background:var(--ac);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 
-    /* Hero */
-    #hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 4rem;max-width:1400px;margin:0 auto;position:relative}
-    .hero-content{flex:1;z-index:2}
+    /* === SECCION 4: HERO === */
+    .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
     .hero-tag{font-size:.8rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin-bottom:1.5rem;opacity:0;transform:translateY(20px);animation:fu .6s 1.4s forwards}
-    .hero-title{font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:1.5rem}
-    .hero-title .line{display:block;opacity:0;transform:translateY(40px);animation:fu .8s forwards}
-    .hero-title .line:nth-child(1){animation-delay:1.5s}
-    .hero-title .line:nth-child(2){animation-delay:1.7s}
-    .hero-subtitle{font-size:1.1rem;color:var(--g6);max-width:400px;margin-bottom:2.5rem;opacity:0;transform:translateY(20px);animation:fu .6s 1.9s forwards}
-    .btn-primary{display:inline-block;padding:1rem 2.5rem;background:var(--bk);color:var(--wh);text-decoration:none;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;border-radius:0;cursor:pointer;transition:var(--tr);opacity:0;animation:fu .6s 2.1s forwards}
-    .btn-primary:hover{background:var(--ac)}
-    .hero-image{flex:1;position:relative;display:flex;align-items:center;justify-content:center}
-    .hero-shape{width:500px;height:500px;border-radius:50%;background:var(--g1);position:absolute}
-    .hero-shoe{width:90%;max-width:550px;position:relative;z-index:1;transform:rotate(-15deg);opacity:0;animation:si 1s 1.8s forwards;filter:drop-shadow(0 20px 40px rgba(0,0,0,.15))}
-    .hero-scroll{position:absolute;bottom:2rem;left:2rem;display:flex;align-items:center;gap:1rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g4)}
-    .scroll-line{width:60px;height:1px;background:var(--g4);position:relative;overflow:hidden}
-    .scroll-line::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:var(--bk);animation:sl 2s infinite}
+    .hero-title{font-size:clamp(3rem,8vw,6.5rem);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:1.5rem}
+    .hero-title span{display:block;opacity:0;transform:translateY(40px);animation:fu .8s forwards}
+    .hero-title span:nth-child(1){animation-delay:1.5s}
+    .hero-title span:nth-child(2){animation-delay:1.7s}
+    .hero-sub{font-size:1.1rem;color:var(--g6);max-width:400px;margin-bottom:2.5rem;opacity:0;transform:translateY(20px);animation:fu .6s 1.9s forwards}
+    .btn-cta{display:inline-block;padding:1rem 2.5rem;background:var(--bk);color:#fff;font-size:.85rem;font-weight:600;letter-spacing:.05em;border:none;border-radius:0;transition:var(--tr);opacity:0;animation:fu .6s 2.1s forwards}
+    .btn-cta:hover{background:var(--ac);color:#fff}
+    .hero-img-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+    .hero-circle{width:400px;height:400px;border-radius:50%;background:var(--g1);position:absolute}
+    .hero-shoe{width:100%;max-width:500px;position:relative;z-index:1;transform:rotate(-15deg);opacity:0;animation:shoeIn 1s 1.8s forwards;filter:drop-shadow(0 20px 40px rgba(0,0,0,.15))}
+    .hero-scroll{position:absolute;bottom:2rem;left:2rem;display:flex;align-items:center;gap:1rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g4)}
+    .scroll-line{width:50px;height:1px;background:var(--g4);position:relative;overflow:hidden}
+    .scroll-line::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:var(--bk);animation:sline 2s infinite}
     @keyframes fu{to{opacity:1;transform:translateY(0)}}
-    @keyframes si{to{opacity:1;transform:rotate(-5deg) scale(1.05)}}
-    @keyframes sl{0%{left:-100%}to{left:100%}}
+    @keyframes shoeIn{to{opacity:1;transform:rotate(-5deg) scale(1.05)}}
+    @keyframes sline{to{left:100%}}
 
-    /* Marquee */
-    .marquee{background:var(--bk);color:var(--wh);padding:1rem 0;overflow:hidden;white-space:nowrap}
-    .marquee-track{display:inline-block;animation:mq 20s linear infinite}
-    .marquee-track span{font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+    /* === SECCION 5: MARQUEE === */
+    .marquee{background:var(--bk);color:#fff;padding:.8rem 0;overflow:hidden;white-space:nowrap}
+    .marquee-inner{display:inline-block;animation:mq 20s linear infinite}
+    .marquee-inner span{font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
     @keyframes mq{to{transform:translateX(-50%)}}
 
-    /* Secciones */
-    .sc{max-width:1400px;margin:0 auto;padding:4rem 2rem}
-    .sh{margin-bottom:3rem}
-    .st{font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin-bottom:.75rem}
-    .stl{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
-
-    /* Catalogo */
-    #catalog{background:var(--g1)}
-    .catalog-filters{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem}
-    .filter-btn{padding:.6rem 1.5rem;border:1.5px solid var(--g2);background:var(--wh);font-family:var(--f);font-size:.8rem;font-weight:500;cursor:pointer;transition:var(--tr);letter-spacing:.02em}
-    .filter-btn:hover,.filter-btn.active{background:var(--bk);color:var(--wh);border-color:var(--bk)}
-    .catalog-sort{margin-bottom:2rem}
-    .catalog-sort select{padding:.6rem 1rem;border:1.5px solid var(--g2);font-family:var(--f);font-size:.8rem;background:var(--wh);cursor:pointer}
-    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem}
-    .product-card{background:var(--wh);overflow:hidden;cursor:pointer;transition:transform var(--tr),box-shadow var(--tr);opacity:0;transform:translateY(30px)}
+    /* === SECCION 6: CATALOGO === */
+    .catalog{background:var(--g1);padding:5rem 0}
+    .section-tag{font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ac);margin-bottom:.5rem}
+    .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:2rem}
+    .filter-btn{padding:.5rem 1.2rem;border:1.5px solid #ddd;background:#fff;font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:var(--tr);border-radius:0}
+    .filter-btn:hover,.filter-btn.active{background:var(--bk);color:#fff;border-color:var(--bk)}
+    .sort-select{padding:.5rem 1rem;border:1.5px solid #ddd;font-family:inherit;font-size:.8rem;background:#fff;border-radius:0}
+    .product-card{background:#fff;overflow:hidden;cursor:pointer;transition:transform var(--tr),box-shadow var(--tr);opacity:0;transform:translateY(30px)}
     .product-card.visible{opacity:1;transform:translateY(0);transition:opacity .5s,transform .5s}
-    .product-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(0,0,0,.08)}
-    .product-img{position:relative;overflow:hidden;aspect-ratio:1;background:var(--g1)}
-    .product-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-    .product-card:hover .product-img img{transform:scale(1.08)}
-    .product-badge{position:absolute;top:1rem;left:1rem;background:var(--ac);color:#fff;font-size:.65rem;font-weight:700;padding:.3rem .8rem;letter-spacing:.1em;text-transform:uppercase}
-    .product-actions{position:absolute;bottom:1rem;right:1rem;display:flex;gap:.5rem;opacity:0;transform:translateY(10px);transition:var(--tr)}
-    .product-card:hover .product-actions{opacity:1;transform:translateY(0)}
-    .action-btn{width:40px;height:40px;background:var(--wh);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.1);transition:var(--tr)}
-    .action-btn:hover{background:var(--bk);color:var(--wh)}
-    .product-info{padding:1.25rem}
-    .product-category{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g4);margin-bottom:.3rem}
-    .product-name{font-size:1rem;font-weight:600;margin-bottom:.5rem}
-    .product-price{font-size:1.1rem;font-weight:700}
-    .product-price .old-price{text-decoration:line-through;color:var(--g4);font-weight:400;font-size:.9rem;margin-left:.5rem}
+    .product-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.08)}
+    .product-thumb{position:relative;overflow:hidden;aspect-ratio:1;background:var(--g1)}
+    .product-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+    .product-card:hover .product-thumb img{transform:scale(1.08)}
+    .product-tag{position:absolute;top:.75rem;left:.75rem;background:var(--ac);color:#fff;font-size:.6rem;font-weight:700;padding:.25rem .7rem;letter-spacing:.08em;text-transform:uppercase}
+    .product-hover{position:absolute;bottom:.75rem;right:.75rem;display:flex;gap:.4rem;opacity:0;transform:translateY(8px);transition:var(--tr)}
+    .product-card:hover .product-hover{opacity:1;transform:translateY(0)}
+    .hover-btn{width:38px;height:38px;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:var(--tr)}
+    .hover-btn:hover{background:var(--bk);color:#fff}
+    .product-body{padding:1.2rem}
+    .product-cat{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--g4);margin-bottom:.2rem}
+    .product-name{font-size:.95rem;font-weight:600;margin-bottom:.4rem}
+    .product-price{font-size:1.05rem;font-weight:700}
+    .old-price{text-decoration:line-through;color:var(--g4);font-weight:400;font-size:.85rem;margin-left:.4rem}
 
-    /* Featured */
-    .featured-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:1.5rem}
-    .featured-large{grid-row:span 2}
-    .featured-card{position:relative;overflow:hidden;cursor:pointer}
-    .featured-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
-    .featured-card:hover img{transform:scale(1.05)}
-    .featured-info{position:absolute;bottom:0;left:0;right:0;padding:2rem;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff}
-    .featured-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--ac);padding:.25rem .75rem;display:inline-block;margin-bottom:.75rem}
-    .featured-info h3{font-size:1.5rem;font-weight:700;margin-bottom:.25rem}
+    /* === SECCION 7: FEATURED === */
+    .featured{padding:5rem 0}
+    .feat-card{position:relative;overflow:hidden;cursor:pointer;height:100%}
+    .feat-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s;min-height:250px}
+    .feat-card:hover img{transform:scale(1.05)}
+    .feat-overlay{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff}
+    .feat-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--ac);padding:.2rem .6rem;display:inline-block;margin-bottom:.5rem}
+    .feat-overlay h3{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
-    /* About */
-    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-    .about-desc{color:var(--g6);margin:1.5rem 0 2.5rem;line-height:1.8}
-    .about-stats{display:flex;gap:3rem}
-    .stat-number,.stat span{font-size:2.5rem;font-weight:900}
-    .stat-number{display:inline}
-    .stat p{font-size:.8rem;color:var(--g4);text-transform:uppercase;letter-spacing:.1em}
-    .about-image img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px}
+    /* === SECCION 8: ABOUT === */
+    .about{padding:5rem 0}
+    .about-desc{color:var(--g6);margin:1.5rem 0 2rem;line-height:1.8}
+    .stat-num,.stat-plus{font-size:2.5rem;font-weight:900}
+    .stat-label{font-size:.75rem;color:var(--g4);text-transform:uppercase;letter-spacing:.1em}
+    .about-img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px}
 
-    /* Newsletter */
-    .newsletter{text-align:center;max-width:600px;margin:0 auto}
-    .newsletter h2{font-size:2.5rem;font-weight:800;margin-bottom:.75rem}
+    /* === SECCION 9: NEWSLETTER === */
+    .newsletter{padding:5rem 0;text-align:center}
+    .newsletter h2{font-size:2.2rem;font-weight:800;margin-bottom:.5rem}
     .newsletter p{color:var(--g6);margin-bottom:2rem}
-    .newsletter-form{display:flex;max-width:500px;margin:0 auto}
-    .newsletter-form input{flex:1;padding:1rem 1.25rem;border:1.5px solid var(--g2);border-right:none;font-family:var(--f);font-size:.9rem;outline:none}
-    .newsletter-form input:focus{border-color:var(--bk)}
-    .newsletter-form .btn-primary{opacity:1;white-space:nowrap}
+    .nl-input{flex:1;padding:.9rem 1.2rem;border:1.5px solid #ddd;border-right:none;font-family:inherit;font-size:.9rem;outline:none;border-radius:0}
+    .nl-input:focus{border-color:var(--bk)}
+    .nl-btn{padding:.9rem 2rem;background:var(--bk);color:#fff;border:none;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--tr);border-radius:0;white-space:nowrap}
+    .nl-btn:hover{background:var(--ac)}
 
-    /* Footer */
-    footer{background:var(--bk);color:var(--wh)}
-    footer .sc{padding:4rem 2rem 2rem}
-    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
-    .footer-col p{color:var(--g4);font-size:.9rem;margin-top:.75rem}
-    .footer-col h4{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.25rem}
-    .footer-col a{display:block;color:var(--g4);text-decoration:none;font-size:.9rem;padding:.3rem 0;transition:color var(--tr)}
-    .footer-col a:hover{color:var(--wh)}
-    .social-links{display:flex;gap:1rem}
-    .social-links a{width:40px;height:40px;border:1px solid var(--g6);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;transition:var(--tr)}
-    .social-links a:hover{background:var(--ac);border-color:var(--ac);color:#fff}
-    .footer-bottom{border-top:1px solid var(--g8);padding-top:2rem;text-align:center}
-    .footer-bottom p{color:var(--g6);font-size:.8rem}
+    /* === SECCION 10: FOOTER === */
+    .site-footer{background:var(--bk);color:#fff;padding:4rem 0 2rem}
+    .site-footer h4{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+    .site-footer a{color:var(--g4);font-size:.9rem;display:block;padding:.2rem 0;transition:color var(--tr)}
+    .site-footer a:hover{color:#fff}
+    .social-link{width:38px;height:38px;border:1px solid var(--g6);display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;transition:var(--tr);color:var(--g4)}
+    .social-link:hover{background:var(--ac);border-color:var(--ac);color:#fff}
+    .footer-bottom{border-top:1px solid #262626;margin-top:3rem;padding-top:2rem;text-align:center;color:var(--g6);font-size:.8rem}
 
-    /* Overlays (cart + modal comparten estilos) */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:var(--tr)}
-    .overlay.active{opacity:1;visibility:visible}
-    .ov-cart{z-index:2000}
-    .ov-modal{z-index:3000}
-
-    /* Cart sidebar */
-    .cart-sidebar{position:fixed;top:0;right:0;width:400px;max-width:90vw;height:100vh;background:var(--wh);z-index:2001;transform:translateX(100%);transition:transform var(--tr);display:flex;flex-direction:column}
-    .cart-sidebar.active{transform:translateX(0)}
-    .cart-header{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid var(--g2)}
-    .cart-header h3{font-size:1.1rem;font-weight:700}
-    .cart-close{font-size:1.5rem}
-    .cart-items{flex:1;overflow-y:auto;padding:1.5rem}
+    /* === SECCION 11: CART SIDEBAR === */
+    .cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;opacity:0;visibility:hidden;transition:var(--tr)}
+    .cart-overlay.open{opacity:1;visibility:visible}
+    .cart-panel{position:fixed;top:0;right:0;width:400px;max-width:90vw;height:100vh;background:#fff;z-index:2001;transform:translateX(100%);transition:transform var(--tr);display:flex;flex-direction:column}
+    .cart-panel.open{transform:translateX(0)}
+    .cart-head{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid #eee}
+    .cart-head h3{font-size:1.1rem;font-weight:700;margin:0}
+    .cart-x{background:none;border:none;font-size:1.5rem;cursor:pointer}
+    .cart-list{flex:1;overflow-y:auto;padding:1.5rem}
     .cart-empty{text-align:center;color:var(--g4);margin-top:3rem}
-    .cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--g1)}
-    .cart-item img{width:70px;height:70px;object-fit:cover;background:var(--g1)}
-    .cart-item-info{flex:1}
-    .cart-item-info h4{font-size:.9rem;font-weight:600}
-    .cart-item-info p{font-size:.85rem;color:var(--g6)}
-    .cart-item-remove{color:var(--g4);font-size:1.2rem;align-self:center}
-    .cart-item-remove:hover{color:var(--ac)}
-    .cart-footer{padding:1.5rem;border-top:1px solid var(--g2)}
-    .cart-total{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;margin-bottom:1rem}
-    .btn-full{width:100%;text-align:center;opacity:1}
+    .cart-row{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid #f5f5f5}
+    .cart-row img{width:65px;height:65px;object-fit:cover;background:var(--g1)}
+    .cart-row-info{flex:1}
+    .cart-row-info h4{font-size:.85rem;font-weight:600;margin:0 0 .2rem}
+    .cart-row-info p{font-size:.8rem;color:var(--g6);margin:0}
+    .cart-rm{background:none;border:none;color:var(--g4);cursor:pointer;font-size:1.2rem;align-self:center}
+    .cart-rm:hover{color:var(--ac)}
+    .cart-foot{padding:1.5rem;border-top:1px solid #eee}
+    .cart-total-row{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;margin-bottom:1rem}
+    .cart-checkout{width:100%;padding:1rem;background:var(--bk);color:#fff;border:none;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--tr);border-radius:0}
+    .cart-checkout:hover{background:var(--ac)}
 
-    /* Modal */
-    .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:var(--wh);z-index:3001;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;opacity:0;visibility:hidden;transition:var(--tr);display:block;padding:0;border:0;border-radius:0}
-    .modal.active{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
-    .modal-close{position:absolute;top:1rem;right:1rem;font-size:1.5rem;z-index:1}
-    .modal-product{display:grid;grid-template-columns:1fr 1fr}
-    .modal-product img{width:100%;height:100%;object-fit:cover}
-    .modal-product-info{padding:2rem;display:flex;flex-direction:column;justify-content:center}
-    .modal-product-info .product-category{margin-bottom:.5rem}
-    .modal-product-info h3{font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
-    .modal-product-info .product-price{font-size:1.3rem;margin-bottom:1rem}
-    .modal-product-info p.desc{color:var(--g6);font-size:.9rem;margin-bottom:1.5rem;line-height:1.6}
-    .modal-product-info .btn-primary{opacity:1;text-align:center}
-
-    /* Animaciones scroll */
-    [data-animate]{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
-    [data-animate].visible{opacity:1;transform:translateY(0)}
-    .toast{position:fixed;bottom:2rem;right:2rem;background:var(--bk);color:var(--wh);padding:1rem 1.5rem;font-size:.85rem;font-weight:500;z-index:5000;transform:translateY(100px);opacity:0;transition:var(--tr)}
+    /* === SECCION 12: MODAL + TOAST === */
+    .qv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:3000;opacity:0;visibility:hidden;transition:var(--tr)}
+    .qv-overlay.open{opacity:1;visibility:visible}
+    .qv-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:#fff;z-index:3001;max-width:700px;width:90%;max-height:85vh;overflow-y:auto;opacity:0;visibility:hidden;transition:var(--tr)}
+    .qv-modal.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+    .qv-close{position:absolute;top:.8rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;z-index:1}
+    .qv-grid{display:grid;grid-template-columns:1fr 1fr}
+    .qv-grid img{width:100%;height:100%;object-fit:cover}
+    .qv-info{padding:2rem;display:flex;flex-direction:column;justify-content:center}
+    .qv-info h3{font-size:1.4rem;font-weight:700;margin:.5rem 0}
+    .qv-info .desc{color:var(--g6);font-size:.9rem;margin:1rem 0 1.5rem;line-height:1.6}
+    .qv-add{padding:.9rem 2rem;background:var(--bk);color:#fff;border:none;font-family:inherit;font-weight:600;cursor:pointer;transition:var(--tr);border-radius:0;font-size:.85rem}
+    .qv-add:hover{background:var(--ac)}
+    .toast{position:fixed;bottom:2rem;right:2rem;background:var(--bk);color:#fff;padding:1rem 1.5rem;font-size:.85rem;font-weight:500;z-index:5000;transform:translateY(100px);opacity:0;transition:var(--tr);border-radius:0}
     .toast.show{transform:translateY(0);opacity:1}
 
-    /* Responsive */
-    @media(max-width:1024px){.featured-grid{grid-template-columns:1fr}.featured-large{grid-row:span 1}}
-    @media(max-width:768px){.nav-links{display:none}.menu-toggle{display:flex}#hero{flex-direction:column;text-align:center;padding-top:6rem}.hero-subtitle{margin:0 auto 2rem}.hero-shape{width:300px;height:300px}.hero-scroll{display:none}.about-grid{grid-template-columns:1fr;gap:2rem}.about-stats{gap:1.5rem}.footer-grid{grid-template-columns:1fr 1fr}.newsletter-form{flex-direction:column}.newsletter-form input{border-right:1.5px solid var(--g2)}.modal-product{grid-template-columns:1fr}}
+    /* === SECCION LABELS === */
+    .sl{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:#fff;padding:.5rem 1rem;text-align:center;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;border-bottom:2px solid var(--ac)}
+    .sl b{color:var(--ac);margin-right:.4rem}
+
+    /* === ANIMACIONES SCROLL === */
+    [data-animate]{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === RESPONSIVE === */
+    @media(max-width:991px){
+      .hero-circle{width:280px;height:280px}
+      .qv-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:767px){
+      .hero{text-align:center}
+      .hero-sub{margin:0 auto 2rem}
+      .hero-circle{width:250px;height:250px}
+      .hero-scroll{display:none}
+      .about-img{margin-top:2rem}
+      .nl-form{flex-direction:column}
+      .nl-input{border-right:1.5px solid #ddd}
+    }
   </style>
 </head>
 <body>
 
+  <!-- S1: LOADER -->
   <div class="sl"><b>1</b> LOADER — Barra de carga animada, se oculta en 1.5s</div>
   <div id="loader"><div class="loader-bar"></div></div>
 
-  <div class="sl"><b>2</b> NAV — Barra fija con links ancla, blur al scroll, icono carrito</div>
-  <nav id="navbar">
-    <div class="nav-container">
-      <a href="#" class="logo">ADDIDAS</a>
-      <ul class="nav-links">
-        <li><a href="#hero">Inicio</a></li>
-        <li><a href="#catalog">Catalogo</a></li>
-        <li><a href="#featured">Destacados</a></li>
-        <li><a href="#about">Nosotros</a></li>
-        <li><a href="#contact">Contacto</a></li>
-      </ul>
-      <div class="nav-actions">
-        <button class="cart-btn nb" id="cartBtn">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
-        <button class="menu-toggle nb" id="menuToggle"><span></span><span></span><span></span></button>
+  <!-- S2: NAVBAR con Bootstrap navbar component -->
+  <div class="sl"><b>2</b> NAV — Barra fija, links ancla con scroll suave, blur al scroll, carrito</div>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="#">ADDIDAS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto me-3">
+          <li class="nav-item"><a class="nav-link" href="#heroSection">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#catalogSection">Catalogo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#featuredSection">Destacados</a></li>
+          <li class="nav-item"><a class="nav-link" href="#aboutSection">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contactSection">Contacto</a></li>
+        </ul>
       </div>
+      <button class="cart-btn" id="openCart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
     </div>
   </nav>
 
-  <div class="sl"><b>3</b> MOBILE MENU — Fullscreen responsive, toggle hamburguesa</div>
-  <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="#hero">Inicio</a></li>
-      <li><a href="#catalog">Catalogo</a></li>
-      <li><a href="#featured">Destacados</a></li>
-      <li><a href="#about">Nosotros</a></li>
-      <li><a href="#contact">Contacto</a></li>
-    </ul>
-  </div>
+  <!-- S3: (mobile menu handled by Bootstrap collapse) -->
+  <div class="sl"><b>3</b> MOBILE MENU — Integrado con Bootstrap collapse, hamburguesa nativa</div>
 
+  <!-- S4: HERO -->
   <div class="sl"><b>4</b> HERO — Titulo fadeUp, zapatilla rotada, CTA, 100vh</div>
-  <section id="hero">
-    <div class="hero-content">
-      <p class="hero-tag">Nueva Coleccion 2026</p>
-      <h1 class="hero-title">
-        <span class="line">DEFINE</span>
-        <span class="line">TU JUEGO</span>
-      </h1>
-      <p class="hero-subtitle">Rendimiento sin limites. Diseno que inspira.</p>
-      <a href="#catalog" class="btn-primary">Explorar Catalogo</a>
-    </div>
-    <div class="hero-image">
-      <div class="hero-shape"></div>
-      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80" alt="Zapatilla deportiva" class="hero-shoe">
+  <section class="hero" id="heroSection">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <p class="hero-tag">Nueva Coleccion 2026</p>
+          <h1 class="hero-title">
+            <span>DEFINE</span>
+            <span>TU JUEGO</span>
+          </h1>
+          <p class="hero-sub">Rendimiento sin limites. Diseno que inspira.</p>
+          <a href="#catalogSection" class="btn-cta">Explorar Catalogo</a>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-img-wrap">
+            <div class="hero-circle"></div>
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80" alt="Zapatilla deportiva" class="hero-shoe">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
   </section>
 
+  <!-- S5: MARQUEE -->
   <div class="sl"><b>5</b> MARQUEE — Texto deslizante infinito con categorias</div>
   <div class="marquee">
-    <div class="marquee-track">
+    <div class="marquee-inner">
       <span>RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star; RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star;</span>
     </div>
   </div>
 
+  <!-- S6: CATALOGO -->
   <div class="sl"><b>6</b> CATALOGO — 12 productos, filtros, orden, hover zoom, carrito</div>
-  <section id="catalog">
-    <div class="sc">
-      <div class="sh">
-        <p class="st">Catalogo</p>
-        <h2 class="stl">Encuentra tu estilo</h2>
+  <section class="catalog" id="catalogSection">
+    <div class="container">
+      <p class="section-tag">Catalogo</p>
+      <h2 class="section-title">Encuentra tu estilo</h2>
+      <div class="d-flex flex-wrap gap-2 mb-3" id="filters">
+        <button class="filter-btn active" data-cat="all">Todos</button>
+        <button class="filter-btn" data-cat="running">Running</button>
+        <button class="filter-btn" data-cat="training">Training</button>
+        <button class="filter-btn" data-cat="lifestyle">Lifestyle</button>
+        <button class="filter-btn" data-cat="football">Football</button>
       </div>
-      <div class="catalog-filters">
-        <button class="filter-btn active" data-category="all">Todos</button>
-        <button class="filter-btn" data-category="running">Running</button>
-        <button class="filter-btn" data-category="training">Training</button>
-        <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
-        <button class="filter-btn" data-category="football">Football</button>
-      </div>
-      <div class="catalog-sort">
-        <select id="sortSelect">
+      <div class="mb-4">
+        <select class="sort-select" id="sortBy">
           <option value="default">Ordenar por</option>
           <option value="price-asc">Precio: Menor a Mayor</option>
           <option value="price-desc">Precio: Mayor a Menor</option>
           <option value="name">Nombre A-Z</option>
         </select>
       </div>
-      <div class="product-grid" id="productGrid"></div>
+      <div class="row g-4" id="grid"></div>
     </div>
   </section>
 
+  <!-- S7: FEATURED -->
   <div class="sl"><b>7</b> FEATURED — Grid asimetrico, zoom hover, overlay degradado</div>
-  <section id="featured">
-    <div class="sc">
-      <div class="sh">
-        <p class="st">Destacados</p>
-        <h2 class="stl">Lo mas vendido</h2>
-      </div>
-      <div class="featured-grid">
-        <div class="featured-card featured-large" data-animate>
-          <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80" alt="Ultraboost">
-          <div class="featured-info"><span class="featured-label">Best Seller</span><h3>Ultraboost 24</h3><p>$189.99</p></div>
-        </div>
-        <div class="featured-card" data-animate>
-          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80" alt="Training gear">
-          <div class="featured-info"><span class="featured-label">Nuevo</span><h3>Training Gear</h3><p>Desde $49.99</p></div>
-        </div>
-        <div class="featured-card" data-animate>
-          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="Apparel">
-          <div class="featured-info"><span class="featured-label">Coleccion</span><h3>Sport Apparel</h3><p>Desde $34.99</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="sl"><b>8</b> ABOUT — Texto + imagen, 3 contadores animados al scroll</div>
-  <section id="about">
-    <div class="sc">
-      <div class="about-grid">
-        <div data-animate>
-          <p class="st">Nosotros</p>
-          <h2 class="stl">Mas que una tienda.<br>Un estilo de vida.</h2>
-          <p class="about-desc">Desde 2020 equipamos atletas y entusiastas del deporte con las mejores marcas y tecnologia. Nuestro compromiso: calidad, innovacion y diseno en cada producto.</p>
-          <div class="about-stats">
-            <div class="stat"><span class="stat-number" data-count="500">0</span><span>+</span><p>Productos</p></div>
-            <div class="stat"><span class="stat-number" data-count="10000">0</span><span>+</span><p>Clientes</p></div>
-            <div class="stat"><span class="stat-number" data-count="15">0</span><p>Marcas</p></div>
+  <section class="featured" id="featuredSection">
+    <div class="container">
+      <p class="section-tag">Destacados</p>
+      <h2 class="section-title">Lo mas vendido</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="feat-card" data-animate style="height:100%">
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80" alt="Ultraboost">
+            <div class="feat-overlay"><span class="feat-label">Best Seller</span><h3>Ultraboost 24</h3><p>$189.99</p></div>
           </div>
         </div>
-        <div class="about-image" data-animate>
-          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" alt="Atleta entrenando">
+        <div class="col-md-6">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="feat-card" data-animate>
+                <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80" alt="Training" style="height:250px">
+                <div class="feat-overlay"><span class="feat-label">Nuevo</span><h3>Training Gear</h3><p>Desde $49.99</p></div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="feat-card" data-animate>
+                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="Apparel" style="height:250px">
+                <div class="feat-overlay"><span class="feat-label">Coleccion</span><h3>Sport Apparel</h3><p>Desde $34.99</p></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- S8: ABOUT -->
+  <div class="sl"><b>8</b> ABOUT — Texto + imagen, 3 contadores animados al scroll</div>
+  <section class="about" id="aboutSection">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6" data-animate>
+          <p class="section-tag">Nosotros</p>
+          <h2 class="section-title">Mas que una tienda.<br>Un estilo de vida.</h2>
+          <p class="about-desc">Desde 2020 equipamos atletas y entusiastas del deporte con las mejores marcas y tecnologia. Nuestro compromiso: calidad, innovacion y diseno en cada producto.</p>
+          <div class="d-flex gap-4">
+            <div><span class="stat-num" data-count="500">0</span><span class="stat-plus">+</span><p class="stat-label">Productos</p></div>
+            <div><span class="stat-num" data-count="10000">0</span><span class="stat-plus">+</span><p class="stat-label">Clientes</p></div>
+            <div><span class="stat-num" data-count="15">0</span><p class="stat-label">Marcas</p></div>
+          </div>
+        </div>
+        <div class="col-lg-6" data-animate>
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" alt="Atleta" class="about-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9: NEWSLETTER -->
   <div class="sl"><b>9</b> NEWSLETTER — Email + boton, toast al enviar, solo frontend</div>
-  <section id="contact">
-    <div class="sc">
-      <div class="newsletter" data-animate>
+  <section class="newsletter" id="contactSection">
+    <div class="container">
+      <div data-animate>
         <h2>Unete al equipo</h2>
         <p>Recibe ofertas exclusivas y lanzamientos antes que nadie.</p>
-        <form class="newsletter-form" id="newsletterForm">
-          <input type="email" placeholder="Tu email" required>
-          <button type="submit" class="btn-primary">Suscribirse</button>
+        <form class="d-flex nl-form mx-auto" style="max-width:500px" id="nlForm">
+          <input type="email" class="nl-input" placeholder="Tu email" required>
+          <button type="submit" class="nl-btn">Suscribirse</button>
         </form>
       </div>
     </div>
   </section>
 
+  <!-- S10: FOOTER -->
   <div class="sl"><b>10</b> FOOTER — 4 columnas, links, redes sociales</div>
-  <footer>
-    <div class="sc">
-      <div class="footer-grid">
-        <div class="footer-col"><h3 class="logo" style="color:#fff">ADDIDAS</h3><p>Tu tienda deportiva de confianza.</p></div>
-        <div class="footer-col"><h4>Tienda</h4><a href="#catalog">Running</a><a href="#catalog">Training</a><a href="#catalog">Lifestyle</a><a href="#catalog">Football</a></div>
-        <div class="footer-col"><h4>Empresa</h4><a href="#about">Nosotros</a><a href="#">Sucursales</a><a href="#">Trabaja con nosotros</a></div>
-        <div class="footer-col"><h4>Siguenos</h4><div class="social-links"><a href="#">IG</a><a href="#">TW</a><a href="#">FB</a></div></div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <h3 style="font-size:1.5rem;font-weight:900">ADDIDAS</h3>
+          <p style="color:var(--g4);font-size:.9rem;margin-top:.5rem">Tu tienda deportiva de confianza.</p>
+        </div>
+        <div class="col-lg-2 col-md-6">
+          <h4>Tienda</h4>
+          <a href="#catalogSection">Running</a><a href="#catalogSection">Training</a><a href="#catalogSection">Lifestyle</a><a href="#catalogSection">Football</a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4>Empresa</h4>
+          <a href="#aboutSection">Nosotros</a><a href="#">Sucursales</a><a href="#">Trabaja con nosotros</a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4>Siguenos</h4>
+          <div class="d-flex gap-2">
+            <a href="#" class="social-link">IG</a><a href="#" class="social-link">TW</a><a href="#" class="social-link">FB</a>
+          </div>
+        </div>
       </div>
-      <div class="footer-bottom"><p>&copy; 2026 ADDIDAS Sport Store. Todos los derechos reservados.</p></div>
+      <div class="footer-bottom">&copy; 2026 ADDIDAS Sport Store. Todos los derechos reservados.</div>
     </div>
   </footer>
 
+  <!-- S11: CART SIDEBAR -->
   <div class="sl"><b>11</b> CARRITO — Sidebar deslizante, items, total, eliminar</div>
-  <div class="overlay ov-cart" id="cartOverlay"></div>
-  <div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close nb" id="cartClose">&times;</button></div>
-    <div class="cart-items" id="cartItems"><p class="cart-empty">Tu carrito esta vacio</p></div>
-    <div class="cart-footer" id="cartFooter" style="display:none">
-      <div class="cart-total"><span>Total:</span><span id="cartTotal">$0.00</span></div>
-      <button class="btn-primary btn-full">Finalizar Compra</button>
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-head"><h3>Tu Carrito</h3><button class="cart-x" id="closeCart">&times;</button></div>
+    <div class="cart-list" id="cartList"><p class="cart-empty">Tu carrito esta vacio</p></div>
+    <div class="cart-foot" id="cartFoot" style="display:none">
+      <div class="cart-total-row"><span>Total:</span><span id="cartTotal">$0.00</span></div>
+      <button class="cart-checkout">Finalizar Compra</button>
     </div>
   </div>
 
+  <!-- S12: MODAL + TOAST -->
   <div class="sl"><b>12</b> MODAL + TOAST — Vista rapida producto, notificacion 2.5s</div>
-  <div class="overlay ov-modal" id="modalOverlay"></div>
-  <div class="modal" id="quickViewModal">
-    <button class="modal-close nb" id="modalClose">&times;</button>
-    <div class="modal-body" id="modalBody"></div>
+  <div class="qv-overlay" id="qvOverlay"></div>
+  <div class="qv-modal" id="qvModal">
+    <button class="qv-close" id="qvClose">&times;</button>
+    <div id="qvBody"></div>
   </div>
   <div class="toast" id="toast"></div>
 
+  <!-- Bootstrap JS (para navbar collapse) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // Helper para getElementById
     const $=id=>document.getElementById(id);
-
-    // URL base de imagenes
     const U='https://images.unsplash.com/photo-';
-
-    // SVG icons reutilizables
-    const IC={
-      eye:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
-      bag:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>'
+    const SVG={
+      eye:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      bag:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>'
     };
 
-    // Productos — imagen usa U+suffix para ahorrar repeticion de URL
     const P=[
-      {id:1,n:"Ultraboost Light",c:"running",p:189.99,op:219.99,img:U+"1542291026-7eec264c27ff?w=500&q=80",nw:1,d:"Zapatilla de running con tecnologia Boost para maxima amortiguacion y retorno de energia."},
-      {id:2,n:"Predator Elite FG",c:"football",p:279.99,op:0,img:U+"1551107696-a4b0c5a0d9a2?w=500&q=80",nw:1,d:"Bota de futbol profesional con control de balon superior y traccion en terreno firme."},
-      {id:3,n:"Gazelle Classic",c:"lifestyle",p:99.99,op:0,img:U+"1606107557195-0e29a4b5b4aa?w=500&q=80",nw:0,d:"Icono del street style con upper de gamuza y suela de goma vulcanizada."},
-      {id:4,n:"Dropset Trainer 2",c:"training",p:139.99,op:159.99,img:U+"1587563871167-1ee9c731aefb?w=500&q=80",nw:0,d:"Disenada para entrenamientos de alta intensidad con soporte lateral reforzado."},
-      {id:5,n:"Supernova Rise",c:"running",p:129.99,op:0,img:U+"1595950653106-6c9ebd614d3a?w=500&q=80",nw:0,d:"Comodidad durante largas distancias con placa de Dreamstrike+ en la mediasuela."},
-      {id:6,n:"Forum Low",c:"lifestyle",p:109.99,op:129.99,img:U+"1600185365926-3a2ce3cdb9eb?w=500&q=80",nw:1,d:"Clasica silueta de basquet reconvertida en icono urbano con strap en el tobillo."},
-      {id:7,n:"Copa Pure II",c:"football",p:199.99,op:0,img:U+"1511886929837-354d827aae26?w=500&q=80",nw:0,d:"Toque puro al balon con piel sintetica de alta gama y construccion minimalista."},
-      {id:8,n:"Power Training Tee",c:"training",p:44.99,op:0,img:U+"1571019614242-c5c5dee9f50b?w=500&q=80",nw:0,d:"Camiseta tecnica con AEROREADY para mantenerte seco durante el entrenamiento."},
-      {id:9,n:"Adizero Adios Pro 4",c:"running",p:249.99,op:0,img:U+"1608231387042-66d1773070a5?w=500&q=80",nw:1,d:"Zapatilla de competicion con placa de carbono para tiempos record en carreras."},
-      {id:10,n:"Samba OG",c:"lifestyle",p:119.99,op:0,img:U+"1560769629-975ec94e6a86?w=500&q=80",nw:0,d:"El icono de los iconos. Estilo retro de futsal que conquisto las calles del mundo."},
-      {id:11,n:"CrazyFlight Mid",c:"training",p:159.99,op:179.99,img:U+"1539185441755-769473a23570?w=500&q=80",nw:0,d:"Disenada para voleibol con amortiguacion Boost y corte medio para soporte de tobillo."},
-      {id:12,n:"X Crazyfast.1",c:"football",p:259.99,op:0,img:U+"1579338559194-a162d19bf842?w=500&q=80",nw:1,d:"Velocidad explosiva con upper ultraligero y Speedframe para aceleracion maxima."}
+      {id:1,n:"Ultraboost Light",c:"running",p:189.99,op:219.99,img:U+"1542291026-7eec264c27ff?w=500&q=80",nw:1,d:"Zapatilla de running con tecnologia Boost para maxima amortiguacion."},
+      {id:2,n:"Predator Elite FG",c:"football",p:279.99,op:0,img:U+"1551107696-a4b0c5a0d9a2?w=500&q=80",nw:1,d:"Bota de futbol profesional con control de balon superior."},
+      {id:3,n:"Gazelle Classic",c:"lifestyle",p:99.99,op:0,img:U+"1606107557195-0e29a4b5b4aa?w=500&q=80",nw:0,d:"Icono del street style con upper de gamuza."},
+      {id:4,n:"Dropset Trainer 2",c:"training",p:139.99,op:159.99,img:U+"1587563871167-1ee9c731aefb?w=500&q=80",nw:0,d:"Para entrenamientos de alta intensidad con soporte lateral."},
+      {id:5,n:"Supernova Rise",c:"running",p:129.99,op:0,img:U+"1595950653106-6c9ebd614d3a?w=500&q=80",nw:0,d:"Comodidad en largas distancias con Dreamstrike+ en mediasuela."},
+      {id:6,n:"Forum Low",c:"lifestyle",p:109.99,op:129.99,img:U+"1600185365926-3a2ce3cdb9eb?w=500&q=80",nw:1,d:"Silueta clasica de basquet reconvertida en icono urbano."},
+      {id:7,n:"Copa Pure II",c:"football",p:199.99,op:0,img:U+"1511886929837-354d827aae26?w=500&q=80",nw:0,d:"Toque puro al balon con piel sintetica de alta gama."},
+      {id:8,n:"Power Training Tee",c:"training",p:44.99,op:0,img:U+"1571019614242-c5c5dee9f50b?w=500&q=80",nw:0,d:"Camiseta tecnica AEROREADY para entrenamiento."},
+      {id:9,n:"Adizero Adios Pro 4",c:"running",p:249.99,op:0,img:U+"1608231387042-66d1773070a5?w=500&q=80",nw:1,d:"Zapatilla de competicion con placa de carbono."},
+      {id:10,n:"Samba OG",c:"lifestyle",p:119.99,op:0,img:U+"1560769629-975ec94e6a86?w=500&q=80",nw:0,d:"El icono retro de futsal que conquisto las calles."},
+      {id:11,n:"CrazyFlight Mid",c:"training",p:159.99,op:179.99,img:U+"1539185441755-769473a23570?w=500&q=80",nw:0,d:"Para voleibol con Boost y corte medio de soporte."},
+      {id:12,n:"X Crazyfast.1",c:"football",p:259.99,op:0,img:U+"1579338559194-a162d19bf842?w=500&q=80",nw:1,d:"Velocidad explosiva con upper ultraligero."}
     ];
 
-    // Estado
-    let cart=[],filt='all',sort='default';
-
-    // Refs DOM
-    const pg=$('productGrid'),cc=$('cartCount'),cs=$('cartSidebar'),
-          co=$('cartOverlay'),ci=$('cartItems'),cf=$('cartFooter'),
-          ct=$('cartTotal'),mm=$('mobileMenu'),mo=$('modalOverlay'),
-          qm=$('quickViewModal'),mb=$('modalBody'),ts=$('toast'),ss=$('sortSelect');
+    let cart=[],filt='all',srt='default';
+    const grid=$('grid'),cc=$('cartCount'),cp=$('cartPanel'),co=$('cartOverlay'),
+          cl=$('cartList'),cft=$('cartFoot'),ctt=$('cartTotal'),
+          qvo=$('qvOverlay'),qvm=$('qvModal'),qvb=$('qvBody'),tst=$('toast');
 
     // S1: Loader
     addEventListener('load',()=>setTimeout(()=>$('loader').classList.add('hidden'),1500));
 
-    // S2: Nav scroll
-    addEventListener('scroll',()=>$('navbar').classList.toggle('scrolled',scrollY>50));
+    // S2: Nav scroll effect
+    addEventListener('scroll',()=>$('mainNav').classList.toggle('scrolled',scrollY>50));
 
-    // S3: Mobile menu
-    $('menuToggle').onclick=()=>mm.classList.toggle('active');
-    document.querySelectorAll('.mobile-menu a').forEach(a=>a.onclick=()=>mm.classList.remove('active'));
+    // S2: Close mobile menu on link click
+    document.querySelectorAll('#navMenu .nav-link').forEach(a=>{
+      a.addEventListener('click',()=>{
+        const c=bootstrap.Collapse.getInstance($('navMenu'));
+        if(c)c.hide();
+      });
+    });
 
-    // S6: Render productos
+    // S6: Render products
     function render(){
       let f=filt==='all'?[...P]:P.filter(x=>x.c===filt);
-      if(sort==='price-asc')f.sort((a,b)=>a.p-b.p);
-      else if(sort==='price-desc')f.sort((a,b)=>b.p-a.p);
-      else if(sort==='name')f.sort((a,b)=>a.n.localeCompare(b.n));
+      if(srt==='price-asc')f.sort((a,b)=>a.p-b.p);
+      else if(srt==='price-desc')f.sort((a,b)=>b.p-a.p);
+      else if(srt==='name')f.sort((a,b)=>a.n.localeCompare(b.n));
 
-      pg.innerHTML=f.map((x,i)=>`
-        <div class="product-card" style="transition-delay:${i*.05}s">
-          <div class="product-img">
-            <img src="${x.img}" alt="${x.n}" loading="lazy">
-            ${x.nw?'<span class="product-badge">Nuevo</span>':''}
-            <div class="product-actions">
-              <button class="action-btn" onclick="qv(${x.id})">${IC.eye}</button>
-              <button class="action-btn" onclick="add(${x.id})">${IC.bag}</button>
+      grid.innerHTML=f.map((x,i)=>`
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="product-card" style="transition-delay:${i*.05}s">
+            <div class="product-thumb">
+              <img src="${x.img}" alt="${x.n}" loading="lazy">
+              ${x.nw?'<span class="product-tag">Nuevo</span>':''}
+              <div class="product-hover">
+                <button class="hover-btn" onclick="qv(${x.id})" title="Vista rapida">${SVG.eye}</button>
+                <button class="hover-btn" onclick="add(${x.id})" title="Agregar">${SVG.bag}</button>
+              </div>
             </div>
-          </div>
-          <div class="product-info">
-            <p class="product-category">${x.c}</p>
-            <h3 class="product-name">${x.n}</h3>
-            <p class="product-price">$${x.p.toFixed(2)}${x.op?`<span class="old-price">$${x.op.toFixed(2)}</span>`:''}</p>
+            <div class="product-body">
+              <p class="product-cat">${x.c}</p>
+              <h3 class="product-name">${x.n}</h3>
+              <p class="product-price">$${x.p.toFixed(2)}${x.op?`<span class="old-price">$${x.op.toFixed(2)}</span>`:''}</p>
+            </div>
           </div>
         </div>`).join('');
 
       requestAnimationFrame(()=>document.querySelectorAll('.product-card').forEach((c,i)=>setTimeout(()=>c.classList.add('visible'),i*80)));
     }
 
-    // S6: Filtros y orden
+    // S6: Filters
     document.querySelectorAll('.filter-btn').forEach(b=>b.onclick=()=>{
       document.querySelector('.filter-btn.active').classList.remove('active');
       b.classList.add('active');
-      filt=b.dataset.category;
+      filt=b.dataset.cat;
       render();
     });
-    ss.onchange=e=>{sort=e.target.value;render()};
+    $('sortBy').onchange=e=>{srt=e.target.value;render()};
 
-    // S11: Carrito
+    // S11: Cart
     function add(id){
       const p=P.find(x=>x.id===id),e=cart.find(x=>x.id===id);
       e?e.q++:cart.push({...p,q:1});
@@ -471,51 +478,49 @@
     function rem(id){cart=cart.filter(x=>x.id!==id);upd()}
     function upd(){
       cc.textContent=cart.reduce((s,x)=>s+x.q,0);
-      if(!cart.length){ci.innerHTML='<p class="cart-empty">Tu carrito esta vacio</p>';cf.style.display='none';return}
-      ci.innerHTML=cart.map(x=>`
-        <div class="cart-item">
+      if(!cart.length){cl.innerHTML='<p class="cart-empty">Tu carrito esta vacio</p>';cft.style.display='none';return}
+      cl.innerHTML=cart.map(x=>`
+        <div class="cart-row">
           <img src="${x.img}" alt="${x.n}">
-          <div class="cart-item-info"><h4>${x.n}</h4><p>$${x.p.toFixed(2)} x ${x.q}</p></div>
-          <button class="cart-item-remove nb" onclick="rem(${x.id})">&times;</button>
+          <div class="cart-row-info"><h4>${x.n}</h4><p>$${x.p.toFixed(2)} x ${x.q}</p></div>
+          <button class="cart-rm" onclick="rem(${x.id})">&times;</button>
         </div>`).join('');
-      ct.textContent='$'+cart.reduce((s,x)=>s+x.p*x.q,0).toFixed(2);
-      cf.style.display='block';
+      ctt.textContent='$'+cart.reduce((s,x)=>s+x.p*x.q,0).toFixed(2);
+      cft.style.display='block';
     }
-
-    // S11: Abrir/cerrar sidebar
-    $('cartBtn').onclick=()=>{cs.classList.add('active');co.classList.add('active')};
-    function closeCart(){cs.classList.remove('active');co.classList.remove('active')}
-    $('cartClose').onclick=closeCart;
-    co.onclick=closeCart;
+    $('openCart').onclick=()=>{cp.classList.add('open');co.classList.add('open')};
+    function closeC(){cp.classList.remove('open');co.classList.remove('open')}
+    $('closeCart').onclick=closeC;
+    co.onclick=closeC;
 
     // S12: Quick View
     function qv(id){
       const x=P.find(p=>p.id===id);
-      mb.innerHTML=`
-        <div class="modal-product">
+      qvb.innerHTML=`
+        <div class="qv-grid">
           <img src="${x.img}" alt="${x.n}">
-          <div class="modal-product-info">
-            <p class="product-category">${x.c}</p>
+          <div class="qv-info">
+            <p class="product-cat">${x.c}</p>
             <h3>${x.n}</h3>
             <p class="product-price">$${x.p.toFixed(2)}${x.op?`<span class="old-price">$${x.op.toFixed(2)}</span>`:''}</p>
             <p class="desc">${x.d}</p>
-            <button class="btn-primary" onclick="add(${x.id});closeM()">Agregar al Carrito</button>
+            <button class="qv-add" onclick="add(${x.id});closeQV()">Agregar al Carrito</button>
           </div>
         </div>`;
-      qm.classList.add('active');mo.classList.add('active');
+      qvm.classList.add('open');qvo.classList.add('open');
     }
-    function closeM(){qm.classList.remove('active');mo.classList.remove('active')}
-    $('modalClose').onclick=closeM;
-    mo.onclick=closeM;
+    function closeQV(){qvm.classList.remove('open');qvo.classList.remove('open')}
+    $('qvClose').onclick=closeQV;
+    qvo.onclick=closeQV;
 
     // S12: Toast
-    function notify(m){ts.textContent=m;ts.classList.add('show');setTimeout(()=>ts.classList.remove('show'),2500)}
+    function notify(m){tst.textContent=m;tst.classList.add('show');setTimeout(()=>tst.classList.remove('show'),2500)}
 
     // S9: Newsletter
-    $('newsletterForm').onsubmit=e=>{e.preventDefault();notify('Gracias por suscribirte!');e.target.reset()};
+    $('nlForm').onsubmit=e=>{e.preventDefault();notify('Gracias por suscribirte!');e.target.reset()};
 
-    // S8: Intersection Observer unificado (animaciones + contadores)
-    const obs=new IntersectionObserver((entries)=>{
+    // S8: Intersection Observer (animaciones + contadores)
+    const obs=new IntersectionObserver(entries=>{
       entries.forEach(e=>{
         if(!e.isIntersecting)return;
         const t=e.target;
@@ -527,9 +532,8 @@
         obs.unobserve(t);
       });
     },{threshold:.15});
-    document.querySelectorAll('[data-animate],.stat-number').forEach(el=>obs.observe(el));
+    document.querySelectorAll('[data-animate],.stat-num').forEach(el=>obs.observe(el));
 
-    // Init
     render();
   </script>
 </body>
