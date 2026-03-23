@@ -17,6 +17,10 @@
     .fc{display:flex;align-items:center;justify-content:center}
     .nb{background:none;border:none;cursor:pointer}
 
+    /* Banners de seccion */
+    .sl{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:var(--wh);padding:.6rem 1.5rem;text-align:center;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;border-bottom:2px solid var(--ac)}
+    .sl b{color:var(--ac);margin-right:.5rem}
+
     /* Loader */
     #loader{position:fixed;inset:0;background:var(--bk);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
     #loader.hidden{opacity:0;visibility:hidden}
@@ -196,8 +200,10 @@
 </head>
 <body>
 
+  <div class="sl"><b>1</b> LOADER — Barra de carga animada, se oculta en 1.5s</div>
   <div id="loader"><div class="loader-bar"></div></div>
 
+  <div class="sl"><b>2</b> NAV — Barra fija con links ancla, blur al scroll, icono carrito</div>
   <nav id="navbar">
     <div class="nav-container">
       <a href="#" class="logo">ADDIDAS</a>
@@ -218,6 +224,7 @@
     </div>
   </nav>
 
+  <div class="sl"><b>3</b> MOBILE MENU — Fullscreen responsive, toggle hamburguesa</div>
   <div class="mobile-menu" id="mobileMenu">
     <ul>
       <li><a href="#hero">Inicio</a></li>
@@ -228,6 +235,7 @@
     </ul>
   </div>
 
+  <div class="sl"><b>4</b> HERO — Titulo fadeUp, zapatilla rotada, CTA, 100vh</div>
   <section id="hero">
     <div class="hero-content">
       <p class="hero-tag">Nueva Coleccion 2026</p>
@@ -245,12 +253,14 @@
     <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
   </section>
 
+  <div class="sl"><b>5</b> MARQUEE — Texto deslizante infinito con categorias</div>
   <div class="marquee">
     <div class="marquee-track">
       <span>RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star; RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star;</span>
     </div>
   </div>
 
+  <div class="sl"><b>6</b> CATALOGO — 12 productos, filtros, orden, hover zoom, carrito</div>
   <section id="catalog">
     <div class="sc">
       <div class="sh">
@@ -276,6 +286,7 @@
     </div>
   </section>
 
+  <div class="sl"><b>7</b> FEATURED — Grid asimetrico, zoom hover, overlay degradado</div>
   <section id="featured">
     <div class="sc">
       <div class="sh">
@@ -299,6 +310,7 @@
     </div>
   </section>
 
+  <div class="sl"><b>8</b> ABOUT — Texto + imagen, 3 contadores animados al scroll</div>
   <section id="about">
     <div class="sc">
       <div class="about-grid">
@@ -319,6 +331,7 @@
     </div>
   </section>
 
+  <div class="sl"><b>9</b> NEWSLETTER — Email + boton, toast al enviar, solo frontend</div>
   <section id="contact">
     <div class="sc">
       <div class="newsletter" data-animate>
@@ -332,6 +345,7 @@
     </div>
   </section>
 
+  <div class="sl"><b>10</b> FOOTER — 4 columnas, links, redes sociales</div>
   <footer>
     <div class="sc">
       <div class="footer-grid">
@@ -344,6 +358,7 @@
     </div>
   </footer>
 
+  <div class="sl"><b>11</b> CARRITO — Sidebar deslizante, items, total, eliminar</div>
   <div class="overlay ov-cart" id="cartOverlay"></div>
   <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header"><h3>Tu Carrito</h3><button class="cart-close nb" id="cartClose">&times;</button></div>
@@ -354,6 +369,7 @@
     </div>
   </div>
 
+  <div class="sl"><b>12</b> MODAL + TOAST — Vista rapida producto, notificacion 2.5s</div>
   <div class="overlay ov-modal" id="modalOverlay"></div>
   <div class="modal" id="quickViewModal">
     <button class="modal-close nb" id="modalClose">&times;</button>
