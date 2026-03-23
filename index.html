@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADDIDAS — Sport Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 CSS para grid responsivo y utilidades -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       RESET Y VARIABLES GLOBALES
+       ============================================ */
+    /* Elimina margenes/paddings por defecto del navegador y define variables CSS reutilizables */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-400: #a3a3a3;
+      --gray-600: #525252;
+      --gray-800: #262626;
+      --accent: #ff4d00;
+      --accent-hover: #e64500;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font: 'Inter', sans-serif;
+    }
+
+    /* Estilos base del body: fuente, color de fondo y de texto */
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Smooth scroll para navegacion con anclas */
+    html { scroll-behavior: smooth; }
+
+    /* ============================================
+       LOADER — Barra de carga al inicio
+       ============================================ */
+    /* Cubre toda la pantalla con fondo negro y muestra una barra animada */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; }
+
+    /* La barra se anima de 0% a 100% de ancho */
+    .loader-bar {
+      width: 120px;
+      height: 3px;
+      background: var(--gray-800);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .loader-bar::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      animation: load 1.2s ease-out forwards;
+    }
+    @keyframes load { to { width: 100%; } }
+
+    /* ============================================
+       NAVEGACION SUPERIOR
+       ============================================ */
+    /* Barra fija en la parte superior que cambia de estilo al hacer scroll */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.2rem 2rem;
+      transition: var(--transition);
+    }
+    /* Clase que se agrega con JS cuando el usuario hace scroll */
+    nav.scrolled {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 var(--gray-200);
+      padding: 0.8rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo con tipografia bold */
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      color: var(--black);
+    }
+
+    /* Links de navegacion en fila, ocultos en mobile */
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color var(--transition);
+      position: relative;
+    }
+    /* Linea decorativa debajo del link al hacer hover */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--black);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-actions { display: flex; align-items: center; gap: 1rem; }
+
+    /* Boton del carrito con contador */
+    .cart-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      color: var(--black);
+    }
+    .cart-count {
+      position: absolute;
+      top: -6px; right: -8px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Boton hamburguesa para mobile (3 lineas) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      width: 24px; height: 2px;
+      background: var(--black);
+      transition: var(--transition);
+    }
+
+    /* Menu mobile a pantalla completa */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--white);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .mobile-menu.active { opacity: 1; visibility: visible; }
+    .mobile-menu ul { list-style: none; text-align: center; }
+    .mobile-menu a {
+      font-size: 2rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--black);
+      display: block;
+      padding: 0.75rem 0;
+      transition: color var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* ============================================
+       HERO — Seccion principal de impacto
+       ============================================ */
+    /* Ocupa toda la pantalla con layout de 2 columnas */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 2rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-content { flex: 1; z-index: 2; }
+
+    /* Etiqueta superior pequena con color accent */
+    .hero-tag {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s 1.4s forwards;
+    }
+
+    /* Titulo gigante con animacion escalonada */
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .line {
+      display: block;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeUp 0.8s forwards;
+    }
+    .hero-title .line:nth-child(1) { animation-delay: 1.5s; }
+    .hero-title .line:nth-child(2) { animation-delay: 1.7s; }
+
+    /* Subtitulo descriptivo */
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--gray-600);
+      max-width: 400px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s 1.9s forwards;
+    }
+
+    /* Boton principal reutilizable */
+    .btn-primary {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--black);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+      animation: fadeUp 0.6s 2.1s forwards;
+    }
+    .btn-primary:hover { background: var(--accent); }
+
+    /* Contenedor de la imagen hero con forma decorativa */
+    .hero-image {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Circulo decorativo detras de la zapatilla */
+    .hero-shape {
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      position: absolute;
+    }
+    /* Imagen de la zapatilla con rotacion y animacion */
+    .hero-shoe {
+      width: 90%;
+      max-width: 550px;
+      position: relative;
+      z-index: 1;
+      transform: rotate(-15deg);
+      opacity: 0;
+      animation: shoeIn 1s 1.8s forwards;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+    }
+
+    /* Indicador de scroll en la parte inferior */
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem; left: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+    .scroll-line {
+      width: 60px; height: 1px;
+      background: var(--gray-400);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      left: -100%; top: 0;
+      width: 100%; height: 100%;
+      background: var(--black);
+      animation: scrollLine 2s infinite;
+    }
+
+    /* ============================================
+       ANIMACIONES KEYFRAMES
+       ============================================ */
+    /* Animacion de aparicion desde abajo */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Animacion especial para la zapatilla */
+    @keyframes shoeIn {
+      to { opacity: 1; transform: rotate(-5deg) scale(1.05); }
+    }
+    /* Animacion de la linea de scroll */
+    @keyframes scrollLine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* ============================================
+       MARQUEE — Texto deslizante infinito
+       ============================================ */
+    /* Banda con texto que se desplaza continuamente */
+    .marquee {
+      background: var(--black);
+      color: var(--white);
+      padding: 1rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-track span {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ============================================
+       SECCIONES GENERALES
+       ============================================ */
+    .section-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    .section-header { margin-bottom: 3rem; }
+    /* Etiqueta pequena encima del titulo */
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* ============================================
+       CATALOGO — Filtros, Ordenamiento y Grid
+       ============================================ */
+    #catalog { background: var(--gray-100); }
+
+    /* Contenedor de botones de filtro */
+    .catalog-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    /* Cada boton de filtro: pill style */
+    .filter-btn {
+      padding: 0.6rem 1.5rem;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    /* Selector de ordenamiento */
+    .catalog-sort { margin-bottom: 2rem; }
+    .catalog-sort select {
+      padding: 0.6rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    /* Grid responsivo de productos: auto-fill para adaptarse */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    /* Tarjeta de producto con efecto hover */
+    .product-card {
+      background: var(--white);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .product-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    /* Contenedor de imagen del producto */
+    .product-img {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--gray-100);
+    }
+    .product-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .product-card:hover .product-img img { transform: scale(1.08); }
+
+    /* Etiqueta "Nuevo" superpuesta */
+    .product-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.3rem 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Botones que aparecen al hover sobre la tarjeta */
+    .product-actions {
+      position: absolute;
+      bottom: 1rem; right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: var(--transition);
+    }
+    .product-card:hover .product-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .action-btn {
+      width: 40px; height: 40px;
+      background: var(--white);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
+    .action-btn:hover { background: var(--black); color: var(--white); }
+
+    /* Informacion del producto: nombre, categoria, precio */
+    .product-info { padding: 1.25rem; }
+    .product-category {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-400);
+      margin-bottom: 0.3rem;
+    }
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .product-price .old-price {
+      text-decoration: line-through;
+      color: var(--gray-400);
+      font-weight: 400;
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+
+    /* ============================================
+       FEATURED — Seccion de productos destacados
+       ============================================ */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+    }
+    /* La primera tarjeta ocupa 2 filas */
+    .featured-large { grid-row: span 2; }
+
+    .featured-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .featured-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+    .featured-card:hover img { transform: scale(1.05); }
+
+    /* Overlay con informacion encima de la imagen */
+    .featured-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: white;
+    }
+    .featured-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--accent);
+      padding: 0.25rem 0.75rem;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+    .featured-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ============================================
+       ABOUT — Seccion Nosotros
+       ============================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-desc {
+      color: var(--gray-600);
+      margin: 1.5rem 0 2.5rem;
+      line-height: 1.8;
+    }
+
+    /* Estadisticas con contador animado */
+    .about-stats {
+      display: flex;
+      gap: 3rem;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      display: inline;
+    }
+    .stat span { font-size: 2.5rem; font-weight: 900; }
+    .stat p {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Imagen del about con esquinas redondeadas */
+    .about-image img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* ============================================
+       NEWSLETTER — Formulario de suscripcion
+       ============================================ */
+    .newsletter {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .newsletter h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .newsletter p {
+      color: var(--gray-600);
+      margin-bottom: 2rem;
+    }
+    /* Formulario con input y boton en fila */
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border: 1.5px solid var(--gray-200);
+      border-right: none;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .newsletter-form input:focus { border-color: var(--black); }
+    .newsletter-form .btn-primary {
+      opacity: 1;
+      white-space: nowrap;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    footer { background: var(--black); color: var(--white); }
+    footer .section-container { padding: 4rem 2rem 2rem; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-col p { color: var(--gray-400); font-size: 0.9rem; margin-top: 0.75rem; }
+    .footer-col h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+    }
+    .footer-col a {
+      display: block;
+      color: var(--gray-400);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.3rem 0;
+      transition: color var(--transition);
+    }
+    .footer-col a:hover { color: var(--white); }
+
+    .social-links { display: flex; gap: 1rem; }
+    .social-links a {
+      width: 40px; height: 40px;
+      border: 1px solid var(--gray-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+    .social-links a:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--gray-800);
+      padding-top: 2rem;
+      text-align: center;
+    }
+    .footer-bottom p { color: var(--gray-600); font-size: 0.8rem; }
+
+    /* ============================================
+       CART SIDEBAR — Panel lateral del carrito
+       ============================================ */
+    /* Overlay oscuro detras del sidebar */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .cart-overlay.active { opacity: 1; visibility: visible; }
+
+    /* Sidebar deslizante desde la derecha */
+    .cart-sidebar {
+      position: fixed;
+      top: 0; right: 0;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: var(--white);
+      z-index: 2001;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-sidebar.active { transform: translateX(0); }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .cart-header h3 { font-size: 1.1rem; font-weight: 700; }
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .cart-empty {
+      text-align: center;
+      color: var(--gray-400);
+      margin-top: 3rem;
+    }
+
+    /* Cada item del carrito */
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .cart-item img {
+      width: 70px; height: 70px;
+      object-fit: cover;
+      background: var(--gray-100);
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-info h4 { font-size: 0.9rem; font-weight: 600; }
+    .cart-item-info p { font-size: 0.85rem; color: var(--gray-600); }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-size: 1.2rem;
+      align-self: center;
+    }
+    .cart-item-remove:hover { color: var(--accent); }
+
+    .cart-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .btn-full { width: 100%; text-align: center; }
+
+    /* ============================================
+       QUICK VIEW MODAL
+       ============================================ */
+    /* Overlay para el modal de vista rapida */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    /* Ventana centrada del modal */
+    .modal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      background: var(--white);
+      z-index: 3001;
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    /* Layout interno del modal */
+    .modal-product {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .modal-product img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .modal-product-info {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .modal-product-info .product-category { margin-bottom: 0.5rem; }
+    .modal-product-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .modal-product-info .product-price {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .modal-product-info p.desc {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .modal-product-info .btn-primary {
+      opacity: 1;
+      text-align: center;
+    }
+
+    /* ============================================
+       ANIMACION DE ENTRADA CON INTERSECTION OBSERVER
+       ============================================ */
+    /* Elementos con data-animate aparecen al hacer scroll */
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    [data-animate].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================
+       TOAST NOTIFICATION
+       ============================================ */
+    /* Notificacion flotante cuando se agrega al carrito */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--black);
+      color: var(--white);
+      padding: 1rem 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 5000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ============================================
+       RESPONSIVE — Adaptacion a pantallas pequenas
+       ============================================ */
+    @media (max-width: 1024px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-large { grid-row: span 1; }
+    }
+
+    @media (max-width: 768px) {
+      /* Oculta links y muestra hamburguesa en mobile */
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+
+      /* Hero en columna en lugar de fila */
+      #hero { flex-direction: column; text-align: center; padding-top: 6rem; }
+      .hero-subtitle { margin: 0 auto 2rem; }
+      .hero-shape { width: 300px; height: 300px; }
+      .hero-scroll { display: none; }
+
+      /* About en una sola columna */
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-stats { gap: 1.5rem; }
+
+      /* Footer en 2 columnas */
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+
+      /* Newsletter input en columna */
+      .newsletter-form { flex-direction: column; }
+      .newsletter-form input { border-right: 1.5px solid var(--gray-200); }
+
+      /* Modal de producto en 1 columna */
+      .modal-product { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       LOADER — Animacion de carga inicial
+       ============================================ -->
+  <div id="loader">
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- ============================================
+       NAVEGACION SUPERIOR FIJA
+       ============================================ -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <!-- Logo de la tienda -->
+      <a href="#" class="logo">ADDIDAS</a>
+      <!-- Links de navegacion (visibles solo en desktop) -->
+      <ul class="nav-links">
+        <li><a href="#hero">Inicio</a></li>
+        <li><a href="#catalog">Catalogo</a></li>
+        <li><a href="#featured">Destacados</a></li>
+        <li><a href="#about">Nosotros</a></li>
+        <li><a href="#contact">Contacto</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- Boton del carrito con SVG de bolsa -->
+        <button class="cart-btn" id="cartBtn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <!-- Contador de items en el carrito -->
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <!-- Boton hamburguesa para menu mobile -->
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Menu mobile a pantalla completa -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#hero">Inicio</a></li>
+      <li><a href="#catalog">Catalogo</a></li>
+      <li><a href="#featured">Destacados</a></li>
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+  </div>
+
+  <!-- ============================================
+       HERO — Seccion de impacto visual
+       ============================================ -->
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-tag">Nueva Coleccion 2026</p>
+      <h1 class="hero-title">
+        <span class="line">DEFINE</span>
+        <span class="line">TU JUEGO</span>
+      </h1>
+      <p class="hero-subtitle">Rendimiento sin limites. Diseno que inspira.</p>
+      <a href="#catalog" class="btn-primary">Explorar Catalogo</a>
+    </div>
+    <div class="hero-image">
+      <div class="hero-shape"></div>
+      <!-- Imagen de zapatilla con efecto flotante -->
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80" alt="Zapatilla deportiva" class="hero-shoe">
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       MARQUEE — Texto deslizante infinito
+       ============================================ -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star; RUNNING &star; TRAINING &star; FOOTBALL &star; BASKETBALL &star; LIFESTYLE &star; OUTDOOR &star;</span>
+    </div>
+  </div>
+
+  <!-- ============================================
+       CATALOGO — Grid de productos con filtros
+       ============================================ -->
+  <section id="catalog">
+    <div class="section-container">
+      <div class="section-header">
+        <p class="section-tag">Catalogo</p>
+        <h2 class="section-title">Encuentra tu estilo</h2>
+      </div>
+
+      <!-- Botones de filtro por categoria -->
+      <div class="catalog-filters">
+        <button class="filter-btn active" data-category="all">Todos</button>
+        <button class="filter-btn" data-category="running">Running</button>
+        <button class="filter-btn" data-category="training">Training</button>
+        <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
+        <button class="filter-btn" data-category="football">Football</button>
+      </div>
+
+      <!-- Selector de ordenamiento -->
+      <div class="catalog-sort">
+        <select id="sortSelect">
+          <option value="default">Ordenar por</option>
+          <option value="price-asc">Precio: Menor a Mayor</option>
+          <option value="price-desc">Precio: Mayor a Menor</option>
+          <option value="name">Nombre A-Z</option>
+        </select>
+      </div>
+
+      <!-- Grid donde se inyectan los productos via JS -->
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FEATURED — Productos destacados
+       ============================================ -->
+  <section id="featured">
+    <div class="section-container">
+      <div class="section-header">
+        <p class="section-tag">Destacados</p>
+        <h2 class="section-title">Lo mas vendido</h2>
+      </div>
+      <div class="featured-grid">
+        <!-- Tarjeta grande que ocupa 2 filas -->
+        <div class="featured-card featured-large" data-animate>
+          <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80" alt="Ultraboost">
+          <div class="featured-info">
+            <span class="featured-label">Best Seller</span>
+            <h3>Ultraboost 24</h3>
+            <p>$189.99</p>
+          </div>
+        </div>
+        <div class="featured-card" data-animate>
+          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=800&q=80" alt="Training gear">
+          <div class="featured-info">
+            <span class="featured-label">Nuevo</span>
+            <h3>Training Gear</h3>
+            <p>Desde $49.99</p>
+          </div>
+        </div>
+        <div class="featured-card" data-animate>
+          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="Apparel">
+          <div class="featured-info">
+            <span class="featured-label">Coleccion</span>
+            <h3>Sport Apparel</h3>
+            <p>Desde $34.99</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ABOUT — Seccion Nosotros con estadisticas
+       ============================================ -->
+  <section id="about">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-text" data-animate>
+          <p class="section-tag">Nosotros</p>
+          <h2 class="section-title">Mas que una tienda.<br>Un estilo de vida.</h2>
+          <p class="about-desc">Desde 2020 equipamos atletas y entusiastas del deporte con las mejores marcas y tecnologia. Nuestro compromiso: calidad, innovacion y diseno en cada producto.</p>
+          <!-- Contadores animados -->
+          <div class="about-stats">
+            <div class="stat">
+              <span class="stat-number" data-count="500">0</span><span>+</span>
+              <p>Productos</p>
+            </div>
+            <div class="stat">
+              <span class="stat-number" data-count="10000">0</span><span>+</span>
+              <p>Clientes</p>
+            </div>
+            <div class="stat">
+              <span class="stat-number" data-count="15">0</span>
+              <p>Marcas</p>
+            </div>
+          </div>
+        </div>
+        <div class="about-image" data-animate>
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" alt="Atleta entrenando">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       NEWSLETTER — Formulario de contacto/suscripcion
+       ============================================ -->
+  <section id="contact">
+    <div class="section-container">
+      <div class="newsletter" data-animate>
+        <h2>Unete al equipo</h2>
+        <p>Recibe ofertas exclusivas y lanzamientos antes que nadie.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" placeholder="Tu email" required>
+          <button type="submit" class="btn-primary">Suscribirse</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer>
+    <div class="section-container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3 class="logo" style="color:white;">ADDIDAS</h3>
+          <p>Tu tienda deportiva de confianza.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tienda</h4>
+          <a href="#catalog">Running</a>
+          <a href="#catalog">Training</a>
+          <a href="#catalog">Lifestyle</a>
+          <a href="#catalog">Football</a>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <a href="#about">Nosotros</a>
+          <a href="#">Sucursales</a>
+          <a href="#">Trabaja con nosotros</a>
+        </div>
+        <div class="footer-col">
+          <h4>Siguenos</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+            <a href="#" aria-label="Facebook">FB</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ADDIDAS Sport Store. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       CART SIDEBAR — Panel lateral del carrito
+       ============================================ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Tu Carrito</h3>
+      <button class="cart-close" id="cartClose">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty">Tu carrito esta vacio</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="btn-primary btn-full">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       QUICK VIEW MODAL — Vista rapida de producto
+       ============================================ -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="quickViewModal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+
+  <!-- ============================================
+       TOAST — Notificacion flotante
+       ============================================ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ============================================
+       JAVASCRIPT — Toda la logica de la aplicacion
+       ============================================ -->
+  <script>
+    // ============================================
+    // BASE DE DATOS DE PRODUCTOS
+    // ============================================
+    // Array de objetos que representa el catalogo completo.
+    // Cada producto tiene: id, nombre, categoria, precio, precio anterior (opcional),
+    // URL de imagen, si es nuevo, y una descripcion.
+    const products = [
+      {
+        id: 1,
+        name: "Ultraboost Light",
+        category: "running",
+        price: 189.99,
+        oldPrice: 219.99,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",
+        isNew: true,
+        description: "Zapatilla de running con tecnologia Boost para maxima amortiguacion y retorno de energia."
+      },
+      {
+        id: 2,
+        name: "Predator Elite FG",
+        category: "football",
+        price: 279.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&q=80",
+        isNew: true,
+        description: "Bota de futbol profesional con control de balon superior y traccion en terreno firme."
+      },
+      {
+        id: 3,
+        name: "Gazelle Classic",
+        category: "lifestyle",
+        price: 99.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=80",
+        isNew: false,
+        description: "Icono del street style con upper de gamuza y suela de goma vulcanizada."
+      },
+      {
+        id: 4,
+        name: "Dropset Trainer 2",
+        category: "training",
+        price: 139.99,
+        oldPrice: 159.99,
+        image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=500&q=80",
+        isNew: false,
+        description: "Disenada para entrenamientos de alta intensidad con soporte lateral reforzado."
+      },
+      {
+        id: 5,
+        name: "Supernova Rise",
+        category: "running",
+        price: 129.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=80",
+        isNew: false,
+        description: "Comodidad durante largas distancias con placa de Dreamstrike+ en la mediasuela."
+      },
+      {
+        id: 6,
+        name: "Forum Low",
+        category: "lifestyle",
+        price: 109.99,
+        oldPrice: 129.99,
+        image: "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=500&q=80",
+        isNew: true,
+        description: "Clasica silueta de basquet reconvertida en icono urbano con strap en el tobillo."
+      },
+      {
+        id: 7,
+        name: "Copa Pure II",
+        category: "football",
+        price: 199.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=500&q=80",
+        isNew: false,
+        description: "Toque puro al balon con piel sintetica de alta gama y construccion minimalista."
+      },
+      {
+        id: 8,
+        name: "Power Training Tee",
+        category: "training",
+        price: 44.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80",
+        isNew: false,
+        description: "Camiseta tecnica con AEROREADY para mantenerte seco durante el entrenamiento."
+      },
+      {
+        id: 9,
+        name: "Adizero Adios Pro 4",
+        category: "running",
+        price: 249.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&q=80",
+        isNew: true,
+        description: "Zapatilla de competicion con placa de carbono para tiempos record en carreras."
+      },
+      {
+        id: 10,
+        name: "Samba OG",
+        category: "lifestyle",
+        price: 119.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=500&q=80",
+        isNew: false,
+        description: "El icono de los iconos. Estilo retro de futsal que conquisto las calles del mundo."
+      },
+      {
+        id: 11,
+        name: "CrazyFlight Mid",
+        category: "training",
+        price: 159.99,
+        oldPrice: 179.99,
+        image: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=80",
+        isNew: false,
+        description: "Disenada para voleibol con amortiguacion Boost y corte medio para soporte de tobillo."
+      },
+      {
+        id: 12,
+        name: "X Crazyfast.1",
+        category: "football",
+        price: 259.99,
+        oldPrice: null,
+        image: "https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=500&q=80",
+        isNew: true,
+        description: "Velocidad explosiva con upper ultraligero y Speedframe para aceleracion maxima."
+      }
+    ];
+
+    // ============================================
+    // ESTADO GLOBAL DE LA APLICACION
+    // ============================================
+    // cart: array que almacena los productos agregados al carrito
+    // currentFilter: categoria actualmente seleccionada
+    // currentSort: criterio de ordenamiento actual
+    let cart = [];
+    let currentFilter = 'all';
+    let currentSort = 'default';
+
+    // ============================================
+    // REFERENCIAS A ELEMENTOS DEL DOM
+    // ============================================
+    // Se obtienen una sola vez para no buscarlos repetidamente
+    const productGrid = document.getElementById('productGrid');
+    const cartBtn = document.getElementById('cartBtn');
+    const cartCount = document.getElementById('cartCount');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartClose = document.getElementById('cartClose');
+    const cartItems = document.getElementById('cartItems');
+    const cartFooter = document.getElementById('cartFooter');
+    const cartTotal = document.getElementById('cartTotal');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const quickViewModal = document.getElementById('quickViewModal');
+    const modalClose = document.getElementById('modalClose');
+    const modalBody = document.getElementById('modalBody');
+    const toast = document.getElementById('toast');
+    const sortSelect = document.getElementById('sortSelect');
+
+    // ============================================
+    // LOADER — Oculta la pantalla de carga
+    // ============================================
+    // Despues de 1.5 segundos, agrega la clase 'hidden' al loader para desvanecerlo
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 1500);
+    });
+
+    // ============================================
+    // NAVBAR — Cambia estilo al hacer scroll
+    // ============================================
+    // Cuando el usuario baja mas de 50px, agrega la clase 'scrolled' al nav
+    // para cambiar su fondo a semitransparente con blur
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // ============================================
+    // MENU MOBILE — Toggle del menu hamburguesa
+    // ============================================
+    // Al hacer click en el boton hamburguesa, muestra/oculta el menu mobile
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Cierra el menu mobile al hacer click en cualquier link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // ============================================
+    // RENDERIZAR PRODUCTOS EN EL GRID
+    // ============================================
+    // Funcion principal que filtra, ordena y muestra los productos
+    function renderProducts() {
+      // Paso 1: Filtrar — si currentFilter es 'all', muestra todos;
+      // sino, solo los de la categoria seleccionada
+      let filtered = currentFilter === 'all'
+        ? [...products]
+        : products.filter(p => p.category === currentFilter);
+
+      // Paso 2: Ordenar segun el criterio seleccionado
+      if (currentSort === 'price-asc') {
+        filtered.sort((a, b) => a.price - b.price);           // Menor a mayor precio
+      } else if (currentSort === 'price-desc') {
+        filtered.sort((a, b) => b.price - a.price);           // Mayor a menor precio
+      } else if (currentSort === 'name') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name)); // Alfabetico A-Z
+      }
+
+      // Paso 3: Generar el HTML de cada tarjeta de producto
+      // Se usa template literals para construir el HTML dinamicamente
+      productGrid.innerHTML = filtered.map((p, index) => `
+        <div class="product-card" style="transition-delay: ${index * 0.05}s">
+          <div class="product-img">
+            <!-- Imagen del producto -->
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+            <!-- Badge "Nuevo" solo si el producto es nuevo -->
+            ${p.isNew ? '<span class="product-badge">Nuevo</span>' : ''}
+            <!-- Botones de accion: vista rapida y agregar al carrito -->
+            <div class="product-actions">
+              <button class="action-btn" onclick="openQuickView(${p.id})" title="Vista rapida">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+              <button class="action-btn" onclick="addToCart(${p.id})" title="Agregar al carrito">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                  <line x1="3" y1="6" x2="21" y2="6"/>
+                  <path d="M16 10a4 4 0 01-8 0"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- Informacion del producto -->
+          <div class="product-info">
+            <p class="product-category">${p.category}</p>
+            <h3 class="product-name">${p.name}</h3>
+            <p class="product-price">
+              $${p.price.toFixed(2)}
+              ${p.oldPrice ? `<span class="old-price">$${p.oldPrice.toFixed(2)}</span>` : ''}
+            </p>
+          </div>
+        </div>
+      `).join(''); // .join('') concatena todo el array en un solo string HTML
+
+      // Paso 4: Animar la aparicion de cada tarjeta con un pequeno retraso
+      // requestAnimationFrame asegura que la animacion ocurra despues del render
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.product-card').forEach((card, i) => {
+          setTimeout(() => card.classList.add('visible'), i * 80);
+        });
+      });
+    }
+
+    // ============================================
+    // FILTROS — Escuchar clicks en botones de filtro
+    // ============================================
+    // Cada boton de filtro tiene un data-category que indica la categoria
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Quita la clase 'active' del boton anterior
+        document.querySelector('.filter-btn.active').classList.remove('active');
+        // Agrega 'active' al boton clickeado
+        btn.classList.add('active');
+        // Actualiza el filtro actual y re-renderiza
+        currentFilter = btn.dataset.category;
+        renderProducts();
+      });
+    });
+
+    // ============================================
+    // ORDENAMIENTO — Escuchar cambio en el select
+    // ============================================
+    sortSelect.addEventListener('change', (e) => {
+      currentSort = e.target.value;
+      renderProducts();
+    });
+
+    // ============================================
+    // CARRITO — Funciones de gestion
+    // ============================================
+
+    // Agrega un producto al carrito por su ID
+    function addToCart(id) {
+      // Busca el producto en el catalogo
+      const product = products.find(p => p.id === id);
+      // Verifica si ya esta en el carrito
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1; // Si ya existe, incrementa cantidad
+      } else {
+        cart.push({ ...product, qty: 1 }); // Si no, lo agrega con cantidad 1
+      }
+      updateCart();       // Actualiza la visualizacion del carrito
+      showToast(`${product.name} agregado al carrito`); // Muestra notificacion
+    }
+
+    // Elimina un producto del carrito por su ID
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCart();
+    }
+
+    // Actualiza la UI del carrito: contador, items, total
+    function updateCart() {
+      // Calcula la cantidad total de items (sumando cantidades)
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCount.textContent = totalItems;
+
+      // Si el carrito esta vacio, muestra mensaje
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="cart-empty">Tu carrito esta vacio</p>';
+        cartFooter.style.display = 'none';
+        return;
+      }
+
+      // Genera el HTML de cada item en el carrito
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <p>$${item.price.toFixed(2)} x ${item.qty}</p>
+          </div>
+          <!-- Boton X para eliminar el item -->
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">&times;</button>
+        </div>
+      `).join('');
+
+      // Calcula y muestra el total
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      cartTotal.textContent = `$${total.toFixed(2)}`;
+      cartFooter.style.display = 'block';
+    }
+
+    // ============================================
+    // CARRITO SIDEBAR — Abrir y cerrar
+    // ============================================
+    // Abre el sidebar del carrito al hacer click en el icono
+    cartBtn.addEventListener('click', () => {
+      cartSidebar.classList.add('active');
+      cartOverlay.classList.add('active');
+    });
+
+    // Funcion para cerrar el sidebar
+    function closeCart() {
+      cartSidebar.classList.remove('active');
+      cartOverlay.classList.remove('active');
+    }
+    cartClose.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+
+    // ============================================
+    // QUICK VIEW MODAL — Vista rapida del producto
+    // ============================================
+    // Abre un modal con los detalles del producto
+    function openQuickView(id) {
+      const p = products.find(prod => prod.id === id);
+      // Genera el contenido HTML del modal
+      modalBody.innerHTML = `
+        <div class="modal-product">
+          <img src="${p.image}" alt="${p.name}">
+          <div class="modal-product-info">
+            <p class="product-category">${p.category}</p>
+            <h3>${p.name}</h3>
+            <p class="product-price">
+              $${p.price.toFixed(2)}
+              ${p.oldPrice ? `<span class="old-price">$${p.oldPrice.toFixed(2)}</span>` : ''}
+            </p>
+            <p class="desc">${p.description}</p>
+            <button class="btn-primary" onclick="addToCart(${p.id}); closeModal();">
+              Agregar al Carrito
+            </button>
+          </div>
+        </div>
+      `;
+      // Muestra el modal y el overlay
+      quickViewModal.classList.add('active');
+      modalOverlay.classList.add('active');
+    }
+
+    // Cierra el modal
+    function closeModal() {
+      quickViewModal.classList.remove('active');
+      modalOverlay.classList.remove('active');
+    }
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+
+    // ============================================
+    // TOAST — Notificacion temporal
+    // ============================================
+    // Muestra un mensaje flotante que desaparece despues de 2.5 segundos
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ============================================
+    // NEWSLETTER — Manejo del formulario
+    // ============================================
+    // Previene el envio real y muestra una notificacion
+    document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+      e.preventDefault();                        // Evita recargar la pagina
+      showToast('Gracias por suscribirte!');      // Muestra confirmacion
+      e.target.reset();                          // Limpia el formulario
+    });
+
+    // ============================================
+    // INTERSECTION OBSERVER — Animaciones al scroll
+    // ============================================
+    // Observa elementos con [data-animate] y les agrega la clase 'visible'
+    // cuando entran en el viewport (area visible del navegador)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Deja de observar una vez visible
+        }
+      });
+    }, { threshold: 0.15 }); // Se activa cuando el 15% del elemento es visible
+
+    // Aplica el observer a todos los elementos con data-animate
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+    // ============================================
+    // CONTADORES ANIMADOS — Seccion About
+    // ============================================
+    // Anima los numeros de 0 al valor final cuando son visibles
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count); // Valor final desde data-count
+          const duration = 2000;                     // Duracion: 2 segundos
+          const step = target / (duration / 16);     // Incremento por frame (60fps)
+          let current = 0;
+
+          // Funcion recursiva que incrementa el numero
+          function count() {
+            current += step;
+            if (current < target) {
+              el.textContent = Math.floor(current).toLocaleString(); // Formato con comas
+              requestAnimationFrame(count);                          // Siguiente frame
+            } else {
+              el.textContent = target.toLocaleString();              // Valor final exacto
+            }
+          }
+          count();
+          statObserver.unobserve(el); // Solo anima una vez
+        }
+      });
+    }, { threshold: 0.5 });
+
+    // Aplica el observer a cada numero de estadistica
+    document.querySelectorAll('.stat-number').forEach(el => statObserver.observe(el));
+
+    // ============================================
+    // INICIALIZACION
+    // ============================================
+    // Renderiza los productos al cargar la pagina
+    renderProducts();
+  </script>
+</body>
+</html>
