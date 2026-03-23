@@ -58,7 +58,7 @@
     .hero-title .line:nth-child(1){animation-delay:1.5s}
     .hero-title .line:nth-child(2){animation-delay:1.7s}
     .hero-subtitle{font-size:1.1rem;color:var(--g6);max-width:400px;margin-bottom:2.5rem;opacity:0;transform:translateY(20px);animation:fu .6s 1.9s forwards}
-    .btn-primary{display:inline-block;padding:1rem 2.5rem;background:var(--bk);color:var(--wh);text-decoration:none;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:var(--tr);opacity:0;animation:fu .6s 2.1s forwards}
+    .btn-primary{display:inline-block;padding:1rem 2.5rem;background:var(--bk);color:var(--wh);text-decoration:none;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;border-radius:0;cursor:pointer;transition:var(--tr);opacity:0;animation:fu .6s 2.1s forwards}
     .btn-primary:hover{background:var(--ac)}
     .hero-image{flex:1;position:relative;display:flex;align-items:center;justify-content:center}
     .hero-shape{width:500px;height:500px;border-radius:50%;background:var(--g1);position:absolute}
@@ -172,10 +172,10 @@
     .cart-item-remove:hover{color:var(--ac)}
     .cart-footer{padding:1.5rem;border-top:1px solid var(--g2)}
     .cart-total{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;margin-bottom:1rem}
-    .btn-full{width:100%;text-align:center}
+    .btn-full{width:100%;text-align:center;opacity:1}
 
     /* Modal */
-    .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:var(--wh);z-index:3001;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;opacity:0;visibility:hidden;transition:var(--tr)}
+    .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:var(--wh);z-index:3001;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;opacity:0;visibility:hidden;transition:var(--tr);display:block;padding:0;border:0;border-radius:0}
     .modal.active{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
     .modal-close{position:absolute;top:1rem;right:1rem;font-size:1.5rem;z-index:1}
     .modal-product{display:grid;grid-template-columns:1fr 1fr}
